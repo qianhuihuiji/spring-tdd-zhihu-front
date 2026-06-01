@@ -17,7 +17,7 @@ const loading = ref(false)
 const total = ref(0)
 const pageIndex = ref(1)
 const pageSize = ref(10)
-const sort = ref<string>('default')
+const sort = ref<string>('')
 const keyword = ref('')
 
 // 提问弹窗
@@ -33,8 +33,8 @@ watch(() => route.query.keyword, (val) => {
   fetchQuestions()
 })
 
-watch(() => route.query.sort, (val) => {
-  sort.value = (val as string) || 'default'
+watch(() => route.query.by, (val) => {
+  sort.value = (val as string) || ''
   pageIndex.value = 1
   fetchQuestions()
 })
@@ -57,8 +57,8 @@ async function fetchQuestions() {
     const res = await getQuestions({
       pageIndex: pageIndex.value,
       pageSize: pageSize.value,
-      keyword: keyword.value || undefined,
-      sort: sort.value !== 'default' ? sort.value : undefined,
+      slug: keyword.value || undefined,
+      by: sort.value || undefined,
     })
     questions.value = res.list
     total.value = res.total
@@ -77,7 +77,7 @@ function handleSortChange(e: any) {
     path: '/',
     query: {
       ...route.query,
-      sort: value === 'default' ? undefined : value,
+      by: value || undefined,
     },
   })
 }
@@ -119,6 +119,7 @@ async function handleCreateQuestion() {
     const q = await createQuestion({
       title: createTitle.value.trim(),
       content: createContent.value.trim(),
+      categoryId: 1,
     })
     message.success('问题发布成功！')
     showCreateModal.value = false
@@ -146,8 +147,8 @@ onMounted(() => {
   if (route.query.keyword) {
     keyword.value = route.query.keyword as string
   }
-  if (route.query.sort) {
-    sort.value = route.query.sort as string
+  if (route.query.by) {
+    sort.value = route.query.by as string
   }
   fetchQuestions()
 })
@@ -168,10 +169,10 @@ onMounted(() => {
             @change="handleSortChange"
             class="sort-tabs"
           >
-            <a-radio-button value="default">综合</a-radio-button>
+            <a-radio-button value="">综合</a-radio-button>
             <a-radio-button value="newest">最新</a-radio-button>
-            <a-radio-button value="most_votes">最多赞同</a-radio-button>
-            <a-radio-button value="most_answers">最多回答</a-radio-button>
+            <a-radio-button value="votes">最多赞同</a-radio-button>
+            <a-radio-button value="answers">最多回答</a-radio-button>
           </a-radio-group>
         </div>
         <div class="page-header-right">

@@ -4,8 +4,8 @@ import type { CommonResult, PageInfo, QuestionVo, CreateQuestionDto } from '@/ty
 export function getQuestions(params: {
   pageIndex: number
   pageSize: number
-  keyword?: string
-  sort?: string
+  slug?: string
+  by?: string
 }): Promise<PageInfo<QuestionVo>> {
   return request
     .get('/questions', { params, skipAuth: true } as any)

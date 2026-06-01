@@ -58,6 +58,7 @@ export interface LoginDto {
 export interface CreateQuestionDto {
   title: string
   content: string
+  categoryId: number
 }
 
 // 注册请求
