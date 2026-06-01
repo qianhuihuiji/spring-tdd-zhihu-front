@@ -1,12 +1,20 @@
 import request from './request'
-import type { CommonResult, PageInfo, QuestionVo } from '@/types/api'
+import type { CommonResult, PageInfo, QuestionVo, CreateQuestionDto } from '@/types/api'
 
 export function getQuestions(params: {
   pageIndex: number
   pageSize: number
+  keyword?: string
+  sort?: string
 }): Promise<PageInfo<QuestionVo>> {
   return request
     .get('/questions', { params, skipAuth: true } as any)
+    .then((res) => res.data.data)
+}
+
+export function createQuestion(data: CreateQuestionDto): Promise<QuestionVo> {
+  return request
+    .post('/questions', data)
     .then((res) => res.data.data)
 }
 

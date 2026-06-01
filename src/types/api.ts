@@ -54,6 +54,12 @@ export interface LoginDto {
   password: string
 }
 
+// 创建问题请求
+export interface CreateQuestionDto {
+  title: string
+  content: string
+}
+
 // 注册请求
 export interface RegisterDto {
   name: string

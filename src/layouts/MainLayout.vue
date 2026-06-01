@@ -1,16 +1,37 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+
+const searchKeyword = ref((route.query.keyword as string) || '')
+
+watch(() => route.query.keyword, (val) => {
+  searchKeyword.value = (val as string) || ''
+})
+
+function handleSearch(value: string) {
+  router.push({ path: '/', query: value ? { keyword: value } : {} })
+}
 
 function handleLogin() {
-  router.push('/login')
+  router.push({ name: 'login', query: { redirect: route.fullPath } })
 }
 
 function handleRegister() {
-  router.push('/register')
+  router.push({ name: 'register', query: { redirect: route.fullPath } })
+}
+
+function handleAskQuestion() {
+  if (!auth.isLoggedIn) {
+    router.push({ name: 'login', query: { redirect: route.fullPath } })
+    return
+  }
+  router.push({ path: '/', query: { ...route.query, ask: Date.now().toString() } })
+  // scroll to top and emit event — handled in QuestionListView via route.query.ask
 }
 
 function handleLogout() {
@@ -36,18 +57,25 @@ function goHome() {
             知乎
           </a-typography-title>
           <a-input-search
+            v-model:value="searchKeyword"
             placeholder="搜索问题..."
             style="width: 400px"
             size="large"
+            @search="handleSearch"
           />
         </a-space>
-        <a-space v-if="!auth.isLoggedIn">
-          <a-button type="primary" ghost @click="handleRegister">注册</a-button>
-          <a-button type="primary" ghost @click="handleLogin">登录</a-button>
-        </a-space>
-        <a-space v-else>
-          <span style="color: #fff">{{ auth.username }}</span>
-          <a-button type="primary" ghost @click="handleLogout">退出</a-button>
+        <a-space>
+          <a-button type="primary" ghost @click="handleAskQuestion">
+            我要提问
+          </a-button>
+          <template v-if="!auth.isLoggedIn">
+            <a-button ghost @click="handleRegister">注册</a-button>
+            <a-button ghost @click="handleLogin">登录</a-button>
+          </template>
+          <template v-else>
+            <span style="color: #fff">{{ auth.username }}</span>
+            <a-button ghost @click="handleLogout">退出</a-button>
+          </template>
         </a-space>
       </div>
     </a-layout-header>
