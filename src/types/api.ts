@@ -54,6 +54,17 @@ export interface LoginDto {
   password: string
 }
 
+// 评论
+export interface CommentVo {
+  id: number
+  commentedId: number
+  content: string
+  voteUpCount: number
+  voteDownCount: number
+  voteType: number | null
+  createTime: string
+}
+
 // 创建问题请求
 export interface CreateQuestionDto {
   title: string

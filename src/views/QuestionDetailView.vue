@@ -21,6 +21,7 @@ import {
 import { useAuthStore } from '@/stores/auth'
 import { message } from 'ant-design-vue'
 import MainLayout from '@/layouts/MainLayout.vue'
+import CommentSection from '@/components/CommentSection.vue'
 import type { QuestionVo, AnswerVo } from '@/types/api'
 
 const route = useRoute()
@@ -225,6 +226,11 @@ onMounted(() => {
           </a-space>
         </a-card>
 
+        <!-- 问题评论 -->
+        <a-card class="question-card">
+          <CommentSection :commented-id="question.id" type="question" />
+        </a-card>
+
         <!-- 回答区域 -->
         <div style="margin-top: 24px">
           <h3 style="margin-bottom: 16px">
@@ -263,6 +269,7 @@ onMounted(() => {
                       👎 {{ answer.voteDownCount }}
                     </a-button>
                   </a-space>
+                  <CommentSection :commented-id="answer.id" type="answer" />
                 </a-card>
               </template>
             </a-list>
