@@ -7,6 +7,7 @@ import { message } from 'ant-design-vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import ActiveUsers from '@/components/ActiveUsers.vue'
 import { slugify } from '@/utils/slug'
+import { categories } from '@/constants/categories'
 import type { QuestionVo } from '@/types/api'
 
 const router = useRouter()
@@ -26,6 +27,7 @@ const keyword = ref('')
 const showCreateModal = ref(false)
 const createTitle = ref('')
 const createContent = ref('')
+const createCategoryId = ref(1)
 const creating = ref(false)
 
 // 监听路由 query 变化
@@ -121,7 +123,7 @@ async function handleCreateQuestion() {
     const questionId = await createQuestion({
       title: createTitle.value.trim(),
       content: createContent.value.trim(),
-      categoryId: 1,
+      categoryId: createCategoryId.value,
     })
     await publishQuestion(Number(questionId))
     const slug = slugify(createTitle.value)
@@ -324,6 +326,17 @@ onMounted(() => {
       @ok="handleCreateQuestion"
     >
       <a-form layout="vertical" style="margin-top: 16px">
+        <a-form-item label="分类" required>
+          <a-select v-model:value="createCategoryId" placeholder="选择分类">
+            <a-select-option
+              v-for="cat in categories"
+              :key="cat.id"
+              :value="cat.id"
+            >
+              {{ cat.name }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
         <a-form-item label="问题标题" required>
           <a-input
             v-model:value="createTitle"
