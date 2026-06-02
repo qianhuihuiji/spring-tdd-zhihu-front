@@ -33,7 +33,7 @@ async function handleSubmit() {
       email: form.email,
       password: form.password,
     })
-    message.success('注册成功，请登录')
+    message.success('注册成功，请查看邮箱完成验证后登录')
     router.push({ name: 'login', query: route.query })
   } catch {
     // 错误已由拦截器处理

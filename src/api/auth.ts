@@ -8,3 +8,9 @@ export function login(data: LoginDto): Promise<string> {
 export function register(data: RegisterDto): Promise<string> {
   return request.post('/auth/register', data).then((res) => res.data.message)
 }
+
+export function verifyEmail(token: string): Promise<string> {
+  return request
+    .get('/auth/verify-email', { params: { token }, skipAuth: true } as any)
+    .then((res) => res.data.message)
+}
