@@ -268,6 +268,12 @@ onMounted(() => {
             </div>
             <div class="card-footer">
               <a-space size="large">
+                <a
+                  class="author-link"
+                  @click.stop="router.push(`/users/${item.userId}`)"
+                >
+                  用户 #{{ item.userId }}
+                </a>
                 <span class="stat-item">
                   <span class="stat-icon">⬆</span>
                   <span class="stat-value">{{ item.voteUpCount }}</span>
@@ -542,6 +548,16 @@ onMounted(() => {
 
 .stat-label {
   color: #bbb;
+}
+
+.author-link {
+  font-size: 13px;
+  color: #1677ff;
+  text-decoration: none;
+}
+
+.author-link:hover {
+  color: #4096ff;
 }
 
 .card-action-hint {

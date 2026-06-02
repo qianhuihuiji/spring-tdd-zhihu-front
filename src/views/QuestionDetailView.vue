@@ -196,6 +196,9 @@ onMounted(() => {
         <a-card class="question-card">
           <h1 class="question-title">{{ question.title }}</h1>
           <div class="question-meta">
+            <a class="author-link" @click="router.push(`/users/${question.userId}`)">
+              用户 #{{ question.userId }}
+            </a>
             <span>👍 {{ question.voteUpCount }}</span>
             <span>👎 {{ question.voteDownCount }}</span>
             <span>💬 {{ question.answersCount }} 个回答</span>
@@ -252,6 +255,15 @@ onMounted(() => {
                 >
                   <div class="answer-content">{{ answer.content }}</div>
                   <a-divider style="margin: 12px 0" />
+                  <div class="answer-meta">
+                    <a
+                      class="author-link"
+                      @click="router.push(`/users/${answer.userId}`)"
+                    >
+                      用户 #{{ answer.userId }}
+                    </a>
+                    <span v-if="answer.createdAt" class="answer-time">{{ answer.createdAt }}</span>
+                  </div>
                   <a-space>
                     <a-button
                       size="small"
@@ -388,5 +400,28 @@ onMounted(() => {
   white-space: pre-wrap;
   line-height: 1.8;
   font-size: 15px;
+}
+
+.answer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.answer-time {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.author-link {
+  font-size: 13px;
+  color: #1677ff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.author-link:hover {
+  color: #4096ff;
 }
 </style>
