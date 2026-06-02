@@ -2,7 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { BellOutlined } from '@ant-design/icons-vue'
+import { BellOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { getNotifications } from '@/api/notifications'
 
 const auth = useAuthStore()
@@ -16,7 +16,6 @@ async function fetchUnreadCount() {
   if (!auth.isLoggedIn) return
   try {
     const res = await getNotifications({ pageIndex: 1, pageSize: 1 })
-    // Count unread from total — approximation; backend may not support unread filter
     unreadCount.value = res.total
   } catch {
     // ignore
@@ -45,7 +44,6 @@ function handleAskQuestion() {
     return
   }
   router.push({ path: '/', query: { ...route.query, ask: Date.now().toString() } })
-  // scroll to top and emit event — handled in QuestionListView via route.query.ask
 }
 
 function handleLogout() {
@@ -55,6 +53,12 @@ function handleLogout() {
 
 function goHome() {
   router.push('/')
+}
+
+function goProfile() {
+  if (auth.userId) {
+    router.push(`/users/${auth.userId}`)
+  }
 }
 
 function goNotifications() {
@@ -91,18 +95,44 @@ onMounted(fetchUnreadCount)
           <a-button type="primary" ghost @click="handleAskQuestion">
             我要提问
           </a-button>
-          <a-badge v-if="auth.isLoggedIn" :count="unreadCount" :overflow-count="99" size="small">
-            <a-button ghost shape="circle" @click="goNotifications">
-              <BellOutlined style="color: #fff" />
-            </a-button>
-          </a-badge>
           <template v-if="!auth.isLoggedIn">
             <a-button ghost @click="handleRegister">注册</a-button>
             <a-button ghost @click="handleLogin">登录</a-button>
           </template>
           <template v-else>
-            <span style="color: #fff">{{ auth.username }}</span>
-            <a-button ghost @click="handleLogout">退出</a-button>
+            <a-dropdown>
+              <a-avatar
+                :size="36"
+                :style="{ backgroundColor: '#fff', color: '#1677ff', cursor: 'pointer' }"
+              >
+                <template #icon>
+                  <UserOutlined />
+                </template>
+              </a-avatar>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item @click="goProfile">
+                    <UserOutlined style="margin-right: 8px" />
+                    我的主页
+                  </a-menu-item>
+                  <a-menu-item @click="goNotifications">
+                    <BellOutlined style="margin-right: 8px" />
+                    通知
+                    <a-badge
+                      v-if="unreadCount > 0"
+                      :count="unreadCount"
+                      :overflow-count="99"
+                      size="small"
+                      style="margin-left: 6px"
+                    />
+                  </a-menu-item>
+                  <a-menu-divider />
+                  <a-menu-item @click="handleLogout">
+                    退出登录
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </a-space>
       </div>
