@@ -202,25 +202,73 @@ id, name, phone, email, avatar
 
 ---
 
-## 开发路线图
+## 前端实现状态（2026-06-02）
 
-### Phase 1: 修复差异（当前）
-- [ ] 创建问题加上 `categoryId` 字段
-- [ ] 问题列表搜索改用 `slug` 参数（保持 keyword 前端行为不变）
+### 后端 36 个接口，已实现 33 个，缺失 3 个
 
-### Phase 2: 评论系统
-- [ ] 新建 `src/api/comments.ts`
-- [ ] 新增 `CommentVo` 类型
-- [ ] QuestionDetailView 添加评论区域
+| 接口 | 状态 |
+|------|------|
+| `GET /questions` 问题列表 | ✅ |
+| `POST /questions` 创建问题 | ✅ |
+| `GET /questions/{id}` 问题详情 | ✅ |
+| `GET /questions/{id}/{slug}` SEO URL | ❌ 未实现 |
+| `POST/DELETE /questions/{id}/up-votes` 问题点赞 | ✅ |
+| `POST/DELETE /questions/{id}/down-votes` 问题点踩 | ✅ |
+| `POST/DELETE /questions/{id}/subscriptions` 关注 | ✅ |
+| `POST /questions/{id}/published-questions` 发布 | ✅ |
+| `GET/POST /questions/{id}/answers` 答案 | ✅ |
+| `DELETE /answers/{id}` 删除答案 | ❌ 未实现 |
+| `POST /answers/{id}/best` 最佳答案 | ✅ |
+| `POST/DELETE /answers/{id}/up-votes` 答案点赞 | ✅ |
+| `POST/DELETE /answers/{id}/down-votes` 答案点踩 | ✅ |
+| `GET/POST /comments/questions/{id}` 问题评论 | ✅ |
+| `GET/POST /comments/answers/{id}` 答案评论 | ✅ |
+| `POST/DELETE /comments/{id}/up-votes` 评论点赞 | ✅ |
+| `POST/DELETE /comments/{id}/down-votes` 评论点踩 | ✅ |
+| `POST /auth/login` 登录 | ✅ |
+| `POST /auth/register` 注册 | ✅ |
+| `GET /auth/logout` 登出 | ✅ |
+| `GET /auth/verify-email` 邮箱验证 | ❌ 未实现 |
+| `GET /notifications` 通知列表 | ✅ |
+| `GET /activities` 动态列表 | ✅ |
+| `GET /active-users` 活跃用户 | ✅ |
+| `GET /users/{id}` 用户信息 | ✅ |
+| `POST /users/{id}/avatar` 头像上传 | ✅ |
+| `POST /users/me/password` 修改密码 | ✅ |
 
-### Phase 3: 通知 + 用户
-- [ ] 新建 `src/api/notifications.ts`
-- [ ] 新建 `src/api/users.ts`
-- [ ] Header 通知铃铛
-- [ ] 通知列表页 `/notifications`
-- [ ] 用户主页 `/users/:id`
+### 已知可改进项
 
-### Phase 4: 完善
-- [ ] 头像上传
-- [ ] 问题 slug URL
-- [ ] 活跃用户侧边栏
+- 答案卡片缺少**删除按钮**（后端支持 `DELETE /answers/{id}`）
+- 问题列表和详情页**用户名显示为「用户 #ID」**（后端 VO 无 userName 字段）
+- 答案详情页 `fetchAnswers` 未带 `noAuthRedirect`，未登录用户访问问题详情会重定向到登录
+- 创建问题时 `categoryId` 硬编码为 `1`
+- 未做响应式适配
+
+---
+
+## 开发计划
+
+### 一、补全缺失接口（3 个）
+
+| 优先级 | 功能 | 说明 |
+|--------|------|------|
+| 高 | 删除答案 | 答案卡片添加删除按钮，仅答案作者可见 |
+| 中 | SEO URL | 问题详情页支持 `/questions/:id/:slug` 格式 |
+| 低 | 邮箱验证 | 注册后验证邮箱的流程页面 |
+
+### 二、修复已知问题
+
+| 优先级 | 问题 | 说明 |
+|--------|------|------|
+| 高 | 答案删除按钮 | 利用 `DELETE /answers/{id}` |
+| 中 | 未登录重定向 | `fetchAnswers` 加 `noAuthRedirect` |
+| 中 | 分类选择 | 创建问题时提供分类下拉框 |
+| 低 | 响应式适配 | 移动端布局优化 |
+
+### 三、用户体验增强
+
+| 优先级 | 功能 | 说明 |
+|--------|------|------|
+| 中 | 答案时间显示 | 答案已有 `createdAt`，可集成到卡片中 |
+| 低 | 用户头像在答案中显示 | 需后端在 AnswerVo 中返回用户信息 |
+| 低 | 面包屑导航 | 详情页显示 首页 > 问题详情
