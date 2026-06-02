@@ -13,6 +13,7 @@ import {
 import {
   getAnswers,
   postAnswer,
+  deleteAnswer,
   upVoteAnswer,
   cancelUpVoteAnswer,
   downVoteAnswer,
@@ -182,6 +183,18 @@ async function handlePostAnswer() {
   }
 }
 
+// 删除答案
+async function handleDeleteAnswer(answer: AnswerVo) {
+  try {
+    await deleteAnswer(answer.id)
+    message.success('答案已删除')
+    if (question.value) question.value.answersCount--
+    fetchAnswers()
+  } catch {
+    // handled by interceptor
+  }
+}
+
 onMounted(() => {
   fetchDetail()
   fetchAnswers()
@@ -281,6 +294,14 @@ onMounted(() => {
                       👎 {{ answer.voteDownCount }}
                     </a-button>
                   </a-space>
+                  <a-popconfirm
+                    title="确定删除这条回答？"
+                    ok-text="删除"
+                    cancel-text="取消"
+                    @confirm="handleDeleteAnswer(answer)"
+                  >
+                    <a-button size="small" danger style="margin-left: 8px">删除</a-button>
+                  </a-popconfirm>
                   <CommentSection :commented-id="answer.id" type="answer" />
                 </a-card>
               </template>
