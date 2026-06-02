@@ -19,7 +19,11 @@ const router = createRouter({
       component: () => import('@/views/RegisterView.vue'),
     },
     {
-      path: '/questions/:id',
+      path: '/questions/:id(\\d+)',
+      redirect: (to: any) => `/questions/${to.params.id}/-`,
+    },
+    {
+      path: '/questions/:id(\\d+)/:slug',
       name: 'question-detail',
       component: () => import('@/views/QuestionDetailView.vue'),
     },

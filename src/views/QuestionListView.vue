@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 import { message } from 'ant-design-vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import ActiveUsers from '@/components/ActiveUsers.vue'
+import { slugify } from '@/utils/slug'
 import type { QuestionVo } from '@/types/api'
 
 const router = useRouter()
@@ -123,11 +124,12 @@ async function handleCreateQuestion() {
       categoryId: 1,
     })
     await publishQuestion(Number(questionId))
+    const slug = slugify(createTitle.value)
     message.success('问题发布成功！')
     showCreateModal.value = false
     createTitle.value = ''
     createContent.value = ''
-    router.push(`/questions/${questionId}`)
+    router.push(`/questions/${questionId}/${slug}`)
   } catch {
     // handled by interceptor
   } finally {
@@ -135,8 +137,8 @@ async function handleCreateQuestion() {
   }
 }
 
-function goDetail(id: number) {
-  router.push(`/questions/${id}`)
+function goDetail(item: QuestionVo) {
+  router.push(`/questions/${item.id}/${slugify(item.title)}`)
 }
 
 const showTotal = (total: number, range: [number, number]) =>
@@ -257,7 +259,7 @@ onMounted(() => {
             :key="item.id"
             class="question-card"
             hoverable
-            @click="goDetail(item.id)"
+            @click="goDetail(item)"
           >
             <div class="card-body">
               <h3 class="card-title">{{ item.title }}</h3>

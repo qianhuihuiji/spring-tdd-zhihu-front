@@ -23,6 +23,7 @@ import { useAuthStore } from '@/stores/auth'
 import { message } from 'ant-design-vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import CommentSection from '@/components/CommentSection.vue'
+import { slugify } from '@/utils/slug'
 import type { QuestionVo, AnswerVo } from '@/types/api'
 
 const route = useRoute()
@@ -51,6 +52,9 @@ async function fetchDetail() {
   try {
     question.value = await getQuestion(id)
     needsLogin.value = false
+    if (route.params.slug === '-') {
+      router.replace(`/questions/${id}/${slugify(question.value.title)}`)
+    }
   } catch (err: any) {
     if (err.response?.status === 401 || err.response?.status === 403) {
       needsLogin.value = true

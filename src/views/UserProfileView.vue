@@ -121,7 +121,7 @@ const activityLabels: Record<string, string> = {
 }
 
 function activityLink(activity: ActivityVo): string | null {
-  if (activity.subjectType === 'question') return `/questions/${activity.subjectId}`
+  if (activity.subjectType === 'question') return `/questions/${activity.subjectId}/-`
   return null
 }
 
