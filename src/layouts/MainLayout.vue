@@ -51,6 +51,20 @@ function handleLogout() {
   router.push('/')
 }
 
+function handleMenuClick(e: { key: string }) {
+  switch (e.key) {
+    case 'profile':
+      if (auth.userId) router.push(`/users/${auth.userId}`)
+      break
+    case 'notifications':
+      router.push('/notifications')
+      break
+    case 'logout':
+      handleLogout()
+      break
+  }
+}
+
 function goHome() {
   router.push('/')
 }
@@ -103,19 +117,16 @@ onMounted(fetchUnreadCount)
             <a-dropdown>
               <a-avatar
                 :size="36"
+                :icon="UserOutlined"
                 :style="{ backgroundColor: '#fff', color: '#1677ff', cursor: 'pointer' }"
-              >
-                <template #icon>
-                  <UserOutlined />
-                </template>
-              </a-avatar>
+              />
               <template #overlay>
-                <a-menu>
-                  <a-menu-item @click="goProfile">
+                <a-menu @click="handleMenuClick">
+                  <a-menu-item key="profile">
                     <UserOutlined style="margin-right: 8px" />
                     我的主页
                   </a-menu-item>
-                  <a-menu-item @click="goNotifications">
+                  <a-menu-item key="notifications">
                     <BellOutlined style="margin-right: 8px" />
                     通知
                     <a-badge
@@ -127,7 +138,7 @@ onMounted(fetchUnreadCount)
                     />
                   </a-menu-item>
                   <a-menu-divider />
-                  <a-menu-item @click="handleLogout">
+                  <a-menu-item key="logout">
                     退出登录
                   </a-menu-item>
                 </a-menu>
