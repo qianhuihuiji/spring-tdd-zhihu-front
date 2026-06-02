@@ -76,10 +76,13 @@ onMounted(fetchUnreadCount)
           >
             知乎
           </a-typography-title>
+          <a-button type="link" style="color: #fff; font-size: 15px" @click="goHome">
+            首页
+          </a-button>
           <a-input-search
             v-model:value="searchKeyword"
             placeholder="搜索问题..."
-            style="width: 400px"
+            style="width: 360px"
             size="large"
             @search="handleSearch"
           />

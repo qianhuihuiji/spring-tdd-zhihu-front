@@ -20,6 +20,9 @@ function goHome() {
     <div class="form-panel">
       <div class="form-wrapper">
         <slot />
+        <div style="text-align: center; margin-top: 24px">
+          <a @click="goHome" style="color: #999; font-size: 13px">← 返回首页</a>
+        </div>
       </div>
     </div>
   </div>
