@@ -69,16 +69,6 @@ function goHome() {
   router.push('/')
 }
 
-function goProfile() {
-  if (auth.userId) {
-    router.push(`/users/${auth.userId}`)
-  }
-}
-
-function goNotifications() {
-  router.push('/notifications')
-}
-
 onMounted(fetchUnreadCount)
 </script>
 
@@ -117,9 +107,10 @@ onMounted(fetchUnreadCount)
             <a-dropdown>
               <a-avatar
                 :size="36"
-                :icon="UserOutlined"
                 :style="{ backgroundColor: '#fff', color: '#1677ff', cursor: 'pointer' }"
-              />
+              >
+                <UserOutlined />
+              </a-avatar>
               <template #overlay>
                 <a-menu @click="handleMenuClick">
                   <a-menu-item key="profile">

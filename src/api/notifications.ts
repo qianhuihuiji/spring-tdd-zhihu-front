@@ -6,6 +6,6 @@ export function getNotifications(params: {
   pageSize: number
 }): Promise<PageInfo<NotificationVo>> {
   return request
-    .get('/notifications', { params })
+    .get('/notifications', { params, noAuthRedirect: true } as any)
     .then((res) => res.data.data)
 }
