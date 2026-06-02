@@ -146,29 +146,35 @@ onMounted(fetchComments)
         暂无评论
       </div>
       <div v-else class="comment-list">
-        <div v-for="comment in comments" :key="comment.id" class="comment-item">
+        <a-card
+          v-for="comment in comments"
+          :key="comment.id"
+          class="comment-card"
+          :body-style="{ padding: '16px 20px' }"
+        >
           <div class="comment-content">{{ comment.content }}</div>
+          <a-divider style="margin: 10px 0" />
           <div class="comment-meta">
             <span class="comment-time">{{ comment.createTime }}</span>
             <a-space size="small">
               <a-button
                 size="small"
-                :type="comment.voteType === 1 ? 'primary' : 'text'"
+                :type="comment.voteType === 1 ? 'primary' : 'default'"
                 @click="handleUpVote(comment)"
               >
-                ▲ {{ comment.voteUpCount }}
+                👍 {{ comment.voteUpCount }}
               </a-button>
               <a-button
                 size="small"
-                :type="comment.voteType === -1 ? 'primary' : 'text'"
+                :type="comment.voteType === -1 ? 'primary' : 'default'"
                 danger
                 @click="handleDownVote(comment)"
               >
-                ▼ {{ comment.voteDownCount }}
+                👎 {{ comment.voteDownCount }}
               </a-button>
             </a-space>
           </div>
-        </div>
+        </a-card>
       </div>
 
       <div v-if="total > pageSize" style="text-align: center; margin-top: 12px">
@@ -190,7 +196,6 @@ onMounted(fetchComments)
 .comment-section {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
 }
 
 .comment-header {
@@ -213,18 +218,9 @@ onMounted(fetchComments)
   border-radius: 8px;
 }
 
-.comment-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.comment-item {
-  padding: 10px 0;
-  border-bottom: 1px solid #f5f5f5;
-}
-
-.comment-item:last-child {
-  border-bottom: none;
+.comment-card {
+  margin-bottom: 12px;
+  border-radius: 8px;
 }
 
 .comment-content {
@@ -232,7 +228,6 @@ onMounted(fetchComments)
   line-height: 1.7;
   color: #333;
   white-space: pre-wrap;
-  margin-bottom: 6px;
 }
 
 .comment-meta {

@@ -246,9 +246,7 @@ onMounted(() => {
         </a-card>
 
         <!-- 问题评论 -->
-        <a-card class="question-card">
-          <CommentSection :commented-id="question.id" type="question" />
-        </a-card>
+        <CommentSection :commented-id="question.id" type="question" />
 
         <!-- 回答区域 -->
         <div style="margin-top: 24px">
