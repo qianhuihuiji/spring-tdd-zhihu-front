@@ -64,6 +64,22 @@ export interface NotificationVo {
   updatedAt: string
 }
 
+// 用户动态
+export interface ActivityVo {
+  id: number
+  userId: number
+  type: string
+  subjectId: number
+  subjectType: string
+  createdAt: string
+}
+
+// 修改密码
+export interface ChangePasswordDto {
+  oldPassword: string
+  newPassword: string
+}
+
 // 评论
 export interface CommentVo {
   id: number
