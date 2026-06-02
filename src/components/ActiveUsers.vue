@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { getActiveUsers } from '@/api/users'
 import type { UserVo } from '@/types/api'
 
 const router = useRouter()
+const auth = useAuthStore()
 const users = ref<UserVo[]>([])
 
 onMounted(async () => {
+  if (!auth.isLoggedIn) return
   try {
     users.value = await getActiveUsers()
   } catch {

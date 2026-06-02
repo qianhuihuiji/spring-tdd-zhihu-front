@@ -3,13 +3,13 @@ import type { UserVo } from '@/types/api'
 
 export function getUser(id: number): Promise<UserVo> {
   return request
-    .get(`/users/${id}`, { noAuthRedirect: true } as any)
+    .get(`/users/${id}`)
     .then((res) => res.data.data)
 }
 
 export function getActiveUsers(): Promise<UserVo[]> {
   return request
-    .get('/active-users', { noAuthRedirect: true } as any)
+    .get('/active-users')
     .then((res) => res.data.data)
 }
 

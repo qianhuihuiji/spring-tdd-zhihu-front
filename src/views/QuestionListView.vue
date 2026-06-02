@@ -117,17 +117,17 @@ async function handleCreateQuestion() {
   }
   creating.value = true
   try {
-    const q = await createQuestion({
+    const questionId = await createQuestion({
       title: createTitle.value.trim(),
       content: createContent.value.trim(),
       categoryId: 1,
     })
-    await publishQuestion(q.id)
+    await publishQuestion(Number(questionId))
     message.success('问题发布成功！')
     showCreateModal.value = false
     createTitle.value = ''
     createContent.value = ''
-    router.push(`/questions/${q.id}`)
+    router.push(`/questions/${questionId}`)
   } catch {
     // handled by interceptor
   } finally {

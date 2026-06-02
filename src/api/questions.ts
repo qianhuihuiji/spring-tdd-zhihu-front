@@ -12,7 +12,7 @@ export function getQuestions(params: {
     .then((res) => res.data.data)
 }
 
-export function createQuestion(data: CreateQuestionDto): Promise<QuestionVo> {
+export function createQuestion(data: CreateQuestionDto): Promise<string> {
   return request
     .post('/questions', data)
     .then((res) => res.data.data)
