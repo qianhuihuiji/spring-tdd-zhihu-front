@@ -45,6 +45,8 @@ src/
 
 - **响应封装**: `CommonResult<T>` → `{ code: number, message: string, data: T }`
 - **JWT 认证**: Token 通过 `Authorization` 头传递，**不带** Bearer 前缀（后端直接解析原始 token）
+- **认证规则**: 仅 `GET /questions`（问题列表）是公开接口，其他所有接口都需要携带 token
+- **skipAuth 使用原则**: 只有 `GET /questions` 使用 `skipAuth: true`。详情/评论等接口即使用户可能未登录，也正常带 token（有则发，无则后端返回 401，由组件处理）
 - **测试用户**: Jane / John / Foo，密码均为 `password`
 - **API 文档**: `http://192.168.1.10:8080/v3/api-docs`（OpenAPI 3.0 JSON，公开访问）
 

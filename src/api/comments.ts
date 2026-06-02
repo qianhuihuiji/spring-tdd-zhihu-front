@@ -6,7 +6,7 @@ export function getQuestionComments(
   params: { pageIndex: number; pageSize: number }
 ): Promise<PageInfo<CommentVo>> {
   return request
-    .get(`/comments/questions/${questionId}`, { params, noAuthRedirect: true } as any)
+    .get(`/comments/questions/${questionId}`, { params } as any)
     .then((res) => res.data.data)
 }
 
@@ -24,7 +24,7 @@ export function getAnswerComments(
   params: { pageIndex: number; pageSize: number }
 ): Promise<PageInfo<CommentVo>> {
   return request
-    .get(`/comments/answers/${answerId}`, { params, noAuthRedirect: true } as any)
+    .get(`/comments/answers/${answerId}`, { params } as any)
     .then((res) => res.data.data)
 }
 
