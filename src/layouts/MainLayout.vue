@@ -1,13 +1,27 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { BellOutlined } from '@ant-design/icons-vue'
+import { getNotifications } from '@/api/notifications'
 
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
 const searchKeyword = ref((route.query.keyword as string) || '')
+const unreadCount = ref(0)
+
+async function fetchUnreadCount() {
+  if (!auth.isLoggedIn) return
+  try {
+    const res = await getNotifications({ pageIndex: 1, pageSize: 1 })
+    // Count unread from total — approximation; backend may not support unread filter
+    unreadCount.value = res.total
+  } catch {
+    // ignore
+  }
+}
 
 watch(() => route.query.keyword, (val) => {
   searchKeyword.value = (val as string) || ''
@@ -42,6 +56,12 @@ function handleLogout() {
 function goHome() {
   router.push('/')
 }
+
+function goNotifications() {
+  router.push('/notifications')
+}
+
+onMounted(fetchUnreadCount)
 </script>
 
 <template>
@@ -68,6 +88,11 @@ function goHome() {
           <a-button type="primary" ghost @click="handleAskQuestion">
             我要提问
           </a-button>
+          <a-badge v-if="auth.isLoggedIn" :count="unreadCount" :overflow-count="99" size="small">
+            <a-button ghost shape="circle" @click="goNotifications">
+              <BellOutlined style="color: #fff" />
+            </a-button>
+          </a-badge>
           <template v-if="!auth.isLoggedIn">
             <a-button ghost @click="handleRegister">注册</a-button>
             <a-button ghost @click="handleLogin">登录</a-button>

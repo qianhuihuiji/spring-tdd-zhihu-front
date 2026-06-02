@@ -23,6 +23,11 @@ const router = createRouter({
       name: 'question-detail',
       component: () => import('@/views/QuestionDetailView.vue'),
     },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: () => import('@/views/NotificationListView.vue'),
+    },
   ],
 })
 

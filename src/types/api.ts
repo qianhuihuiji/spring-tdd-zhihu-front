@@ -54,6 +54,16 @@ export interface LoginDto {
   password: string
 }
 
+// 通知
+export interface NotificationVo {
+  id: number
+  type: string
+  userId: number
+  readAt: string | null
+  createdAt: string
+  updatedAt: string
+}
+
 // 评论
 export interface CommentVo {
   id: number
