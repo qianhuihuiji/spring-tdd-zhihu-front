@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { BellOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { getNotifications } from '@/api/notifications'
+import { getUser } from '@/api/users'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -11,12 +12,23 @@ const route = useRoute()
 
 const searchKeyword = ref((route.query.keyword as string) || '')
 const unreadCount = ref(0)
+const avatarUrl = ref<string | null>(null)
 
 async function fetchUnreadCount() {
   if (!auth.isLoggedIn) return
   try {
     const res = await getNotifications({ pageIndex: 1, pageSize: 1 })
     unreadCount.value = res.total
+  } catch {
+    // ignore
+  }
+}
+
+async function fetchAvatar() {
+  if (!auth.isLoggedIn || !auth.userId) return
+  try {
+    const user = await getUser(auth.userId)
+    avatarUrl.value = user.avatar
   } catch {
     // ignore
   }
@@ -69,7 +81,10 @@ function goHome() {
   router.push('/')
 }
 
-onMounted(fetchUnreadCount)
+onMounted(() => {
+  fetchUnreadCount()
+  fetchAvatar()
+})
 </script>
 
 <template>
@@ -107,6 +122,7 @@ onMounted(fetchUnreadCount)
             <a-dropdown>
               <a-avatar
                 :size="36"
+                :src="avatarUrl"
                 :style="{ backgroundColor: '#fff', color: '#1677ff', cursor: 'pointer' }"
               >
                 <UserOutlined />
