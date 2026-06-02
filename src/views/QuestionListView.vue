@@ -5,6 +5,7 @@ import { getQuestions, createQuestion } from '@/api/questions'
 import { useAuthStore } from '@/stores/auth'
 import { message } from 'ant-design-vue'
 import MainLayout from '@/layouts/MainLayout.vue'
+import ActiveUsers from '@/components/ActiveUsers.vue'
 import type { QuestionVo } from '@/types/api'
 
 const router = useRouter()
@@ -157,7 +158,9 @@ onMounted(() => {
 <template>
   <MainLayout>
     <div class="page-wrapper">
-      <!-- 页面头部 -->
+      <div class="page-layout">
+        <div class="page-main">
+          <!-- 页面头部 -->
       <div class="page-header">
         <div class="page-header-left">
           <h1 class="page-title">发现更多问题</h1>
@@ -282,18 +285,23 @@ onMounted(() => {
       </div>
 
       <!-- 底部分页 -->
-      <div v-if="paginationVisible" class="pagination-wrapper pagination-bottom">
-        <a-pagination
-          v-model:current="pageIndex"
-          :total="total"
-          :page-size="pageSize"
-          show-size-changer
-          show-quick-jumper
-          :show-total="showTotal"
-          :page-size-options="['5', '10', '20', '50']"
-          @change="handlePageChange"
-          @show-size-change="handleSizeChange"
-        />
+          <div v-if="paginationVisible" class="pagination-wrapper pagination-bottom">
+            <a-pagination
+              v-model:current="pageIndex"
+              :total="total"
+              :page-size="pageSize"
+              show-size-changer
+              show-quick-jumper
+              :show-total="showTotal"
+              :page-size-options="['5', '10', '20', '50']"
+              @change="handlePageChange"
+              @show-size-change="handleSizeChange"
+            />
+          </div>
+        </div>
+        <div class="page-sidebar">
+          <ActiveUsers />
+        </div>
       </div>
     </div>
 
@@ -333,6 +341,24 @@ onMounted(() => {
 <style scoped>
 .page-wrapper {
   padding-bottom: 40px;
+}
+
+.page-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.page-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.page-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 88px;
 }
 
 /* ---- 页面头部 ---- */
