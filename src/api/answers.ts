@@ -6,7 +6,7 @@ export function getAnswers(
   params: { pageIndex: number; pageSize: number }
 ): Promise<PageInfo<AnswerVo>> {
   return request
-    .get(`/questions/${questionId}/answers`, { params })
+    .get(`/questions/${questionId}/answers`, { params, noAuthRedirect: true } as any)
     .then((res) => res.data.data)
 }
 
