@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { getQuestions, createQuestion } from '@/api/questions'
+import { getQuestions, createQuestion, publishQuestion } from '@/api/questions'
 import { useAuthStore } from '@/stores/auth'
 import { message } from 'ant-design-vue'
 import MainLayout from '@/layouts/MainLayout.vue'
@@ -122,6 +122,7 @@ async function handleCreateQuestion() {
       content: createContent.value.trim(),
       categoryId: 1,
     })
+    await publishQuestion(q.id)
     message.success('问题发布成功！')
     showCreateModal.value = false
     createTitle.value = ''

@@ -18,6 +18,12 @@ export function createQuestion(data: CreateQuestionDto): Promise<QuestionVo> {
     .then((res) => res.data.data)
 }
 
+export function publishQuestion(questionId: number): Promise<void> {
+  return request
+    .post(`/questions/${questionId}/published-questions`)
+    .then((res) => res.data)
+}
+
 export function getQuestion(id: number): Promise<QuestionVo> {
   return request
     .get(`/questions/${id}`, { noAuthRedirect: true } as any)
