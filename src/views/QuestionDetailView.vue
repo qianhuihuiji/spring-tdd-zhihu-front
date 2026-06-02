@@ -71,6 +71,7 @@ async function fetchAnswers() {
     })
     answers.value = res.list
     answersTotal.value = res.total
+    if (question.value) question.value.answersCount = res.total
   } catch {
     // handled by interceptor
   } finally {
@@ -174,7 +175,6 @@ async function handlePostAnswer() {
     answerContent.value = ''
     showAnswerForm.value = false
     answerPageIndex.value = 1
-    if (question.value) question.value.answersCount++
     fetchAnswers()
   } catch {
     // handled by interceptor
@@ -188,7 +188,6 @@ async function handleDeleteAnswer(answer: AnswerVo) {
   try {
     await deleteAnswer(answer.id)
     message.success('答案已删除')
-    if (question.value) question.value.answersCount--
     fetchAnswers()
   } catch {
     // handled by interceptor
